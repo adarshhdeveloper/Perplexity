@@ -10,6 +10,7 @@ import { sendEmail } from "../services/mail.service.js";
  * @body { username, email, password }
  */
 export async function register(req, res) {
+    
     const { username, email, password } = req.body;
 
     const isUserAlreadyExists = await userModel.findOne({
