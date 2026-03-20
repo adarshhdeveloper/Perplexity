@@ -1,7 +1,6 @@
-import {Server, Socket} from 'socket.io'
+import {Server} from 'socket.io'
 
 let io;
-
 export function initSocket(httpServer){
     io = new Server(httpServer,{
         cors:{

@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-//transporter  jo ki emal bhejega 
+//transporter  jo ki email bhejega 
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {

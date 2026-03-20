@@ -1,3 +1,29 @@
+//frontend flow 
+
+main.jsx → App start hota hai
+app/
+
+App.jsx → Routes render karta hai
+app.routes.jsx → Saari routes define hain
+app.store.js → Redux store — poori app ki state yahan
+index.css → Global styles
+
+features/auth/
+
+pages/ → Login, Register pages
+components/ → Form components
+hooks/ → Auth ke custom hooks
+service/ → API calls (login, register)
+auth.slice.js → Redux state (user, token)
+
+features/chat/
+
+hooks/ → useChat — socket connection
+services/ → chat.socket.js — socket setup
+Dashboard.jsx → Chat UI
+
+
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

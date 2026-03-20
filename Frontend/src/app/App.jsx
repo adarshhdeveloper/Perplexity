@@ -6,14 +6,17 @@ import { useEffect } from 'react'
 
 const App = () => {
 
+
   //hydration process 
   const auth = useAuth()
   useEffect(()=>{
     auth.handleGetMe()
   },[])
+
   return (
    <RouterProvider router={router} />
   )
+  
 }
 
 export default App

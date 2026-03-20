@@ -6,6 +6,7 @@ const Register = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [registered, setRegistered] = useState(false)
 
   const {handleRegister} = useAuth()
 
@@ -18,7 +19,29 @@ const Register = () => {
       password,
     }
     await handleRegister(payload)
+    setRegistered(true)
   }
+ if (registered) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-950">
+            <div className="bg-gray-900 border border-gray-700 rounded-2xl p-10 flex flex-col items-center gap-4 max-w-md w-full">
+                <div className="text-6xl">📧</div>
+                <h2 className="text-2xl font-bold text-white">Check Your Email!</h2>
+                <p className="text-gray-400 text-center">
+                    We've sent a verification link to your email address.
+                </p>
+                <p className="text-gray-400 text-center">
+                    Please check your inbox and click the link to verify your account.
+                </p>
+                <div className="bg-gray-800 rounded-xl px-6 py-3 mt-2">
+                    <p className="text-blue-400 text-sm text-center">
+                        Didn't receive the email? Check your spam folder.
+                    </p>
+                </div>
+            </div>
+        </div>
+    )
+ }
 
   return (
     <section className="min-h-screen bg-zinc-950 px-4 py-10 text-zinc-100 sm:px-6 lg:px-8">

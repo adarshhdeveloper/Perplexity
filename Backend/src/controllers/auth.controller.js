@@ -1,6 +1,7 @@
 import userModel from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../services/mail.service.js";
+import { verifyEmailTemplate } from "../templates/verifyEmail.template.js";
 
 
 /**
@@ -109,6 +110,19 @@ export async function login(req, res) {
 
 }
 
+/**
+ * @desc Logout user by clearing the token cookie
+ * @route POST /api/auth/logout
+ * @access Private  
+ */
+export async function logout(req, res) {
+    res.clearCookie("token")
+    res.status(200).json({
+        message: "Logout successful",
+        success: true
+    })
+}
+
 
 /**
  * @desc Get current logged in user's details
@@ -158,12 +172,7 @@ export async function verifyEmail(req, res) {
         user.verified = true;
 
         await user.save();
-        const html =
-            `
-        <h1>Email Verified Successfully!</h1>
-        <p>Your email has been verified. You can now log in to your account.</p>
-        <a href="http://localhost:3000/login">Go to Login</a>
-    `
+        const html = verifyEmailTemplate()
         return res.send(html);
     } catch (err) {
         return res.status(400).json({
