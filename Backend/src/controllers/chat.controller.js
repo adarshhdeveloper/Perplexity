@@ -1,6 +1,6 @@
 import chatModel from "../models/chat.model.js"
 import messageModel from "../models/message.model.js"
-import {genarateResponse,genarateChatTitle} from "../services/ai.service.js"
+import {generateResponse,genarateChatTitle} from "../services/ai.service.js"
 
 export async function sendMessage(req, res) {
 
@@ -25,7 +25,7 @@ export async function sendMessage(req, res) {
 
     const messages = await messageModel.find({chat:chatId || chat._id})
 
-    const result = await genarateResponse(messages)
+    const result = await generateResponse(messages)
 
     const aimessage = await messageModel.create({
         chat: chatId ||chat._id,
@@ -72,5 +72,28 @@ export async function getMessages(req,res) {
     res.status(200).json({
         message : "Message retrive successfully",
         messages
+    })
+}
+
+export async function deleteChat(req,res) {
+    const {chatId} = req.params;
+
+    const chat = await chatModel.findOneAndDelete({
+        _id: chatId,
+        user : req.user.id
+    })
+
+        if(!chat){
+            return res.status(404).json({
+                message : "Chat not found"
+            })
+        }
+
+        await messageModel.deleteMany({
+            chat : chatId
+        })
+
+    res.status(200).json({
+        message : "Chat deleted successfully",
     })
 }

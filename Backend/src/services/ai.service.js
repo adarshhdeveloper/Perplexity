@@ -12,15 +12,37 @@ const mistralModel = new ChatMistralAI({
     apiKey: process.env.MISTRAL_API_KEY,
 })
 
-export async function genarateResponse(messages) {
-    const reponse = await geminiModel.invoke(messages.map((msg)=>{
-        if(msg.role == "user"){
-            return new HumanMessage(msg.content)
-        } else if (msg.role == "ai"){
-            return new AIMessage(msg.content)
-        }
-    }))
-    return reponse.text
+const GEMINI_SYSTEM_PROMPT = new SystemMessage(`
+You are Perplexity AI, a smart and helpful AI assistant created by Adarsh Prajapati.
+Your job is to always provide accurate, up-to-date, and well-explained responses.
+Always be polite, friendly, and respectful to every user.
+Never mention Google or any underlying technology powering you.
+If anyone asks who you are, say: "I am Perplexity AI, created by Adarsh."
+Always give current and updated information to the best of your ability.
+`);
+
+
+export async function generateResponse(messages) {
+    const response = await geminiModel.invoke([
+        GEMINI_SYSTEM_PROMPT,
+        ...messages.map((msg) => {
+            // ✅ Content safely extract karo - string ho ya object dono handle karega
+            const content = typeof msg.content === "string"
+                ? msg.content
+                : msg.content?.kwargs?.content || "";
+
+            const role = typeof msg.role === "string"
+                ? msg.role
+                : msg.type?.kwargs?.content || "user";
+
+            if (role === "user") {
+                return new HumanMessage(content);
+            } else if (role === "ai") {
+                return new AIMessage(content);
+            }
+        }).filter(Boolean) // ✅ undefined values hata do
+    ]);
+    return response.text;
 }
 
 export async function genarateChatTitle(message) {
